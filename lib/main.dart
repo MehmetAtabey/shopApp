@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopApp/providers/products_provider.dart';
+import 'package:shopApp/screens/product_detail_screen.dart';
 import 'package:shopApp/screens/products_overview_screen.dart';
 
 void main() {
@@ -14,13 +15,15 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => ProductsProvider(),
       child: MaterialApp(
-        title: 'Shop App',
-        theme: ThemeData(
-            primarySwatch: Colors.purple,
-            accentColor: Colors.deepOrange,
-            fontFamily: 'Lato'),
-        home: ProductsOverviewScreen(),
-      ),
+          title: 'Shop App',
+          theme: ThemeData(
+              primarySwatch: Colors.purple,
+              accentColor: Colors.deepOrange,
+              fontFamily: 'Lato'),
+          home: ProductsOverviewScreen(),
+          routes: {
+            ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
+          }),
     );
   }
 }
