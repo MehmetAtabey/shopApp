@@ -4,7 +4,7 @@ import 'package:shopApp/models/product.dart';
 import 'package:shopApp/providers/products_provider.dart';
 
 class ProductDetailScreen extends StatelessWidget {
-  static String routeName = "/product-detail";
+  static final String routeName = "/product-detail";
   Product product;
   @override
   Widget build(BuildContext context) {
@@ -12,9 +12,6 @@ class ProductDetailScreen extends StatelessWidget {
     product = Provider.of<ProductsProvider>(context).findById(productId);
 
     return Scaffold(
-        appBar: AppBar(title: Text(product.title)),
-        body: Text("test"));
+        appBar: AppBar(title: Text(product.title)), body: Text("test"));
   }
-
-
 }

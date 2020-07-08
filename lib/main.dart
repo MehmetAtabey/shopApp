@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shopApp/providers/cart.dart';
 import 'package:shopApp/providers/products_provider.dart';
 import 'package:shopApp/screens/product_detail_screen.dart';
 import 'package:shopApp/screens/products_overview_screen.dart';
@@ -12,19 +13,21 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ProductsProvider(),
-      child: MaterialApp(
-          title: 'Shop App',
-          theme: ThemeData(
-              primarySwatch: Colors.purple,
-              accentColor: Colors.deepOrange,
-              fontFamily: 'Lato'),
-          home: ProductsOverviewScreen(),
-          routes: {
-            ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
-          }),
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (ctx) => ProductsProvider()),
+          ChangeNotifierProvider(create: (ctx) => Cart()),
+        ],
+        child: MaterialApp(
+            title: 'Shop App',
+            theme: ThemeData(
+                primarySwatch: Colors.purple,
+                accentColor: Colors.deepOrange,
+                fontFamily: 'Lato'),
+            home: ProductsOverviewScreen(),
+            routes: {
+              ProductDetailScreen.routeName: (context) => ProductDetailScreen(),
+            }));
   }
 }
 
@@ -34,6 +37,16 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text("Shop App"),
+          actions: <Widget>[
+            PopupMenuButton(
+              onSelected: (value) => print(value),
+              icon: Icon(Icons.more_vert),
+              itemBuilder: (_) => [
+                PopupMenuItem(child: Text("Only Favorites"), value: 0),
+                PopupMenuItem(child: Text("Show All"), value: 1)
+              ],
+            )
+          ],
         ),
         body: Text(
             "test") // This trailing comma makes auto-formatting nicer for build methods.
