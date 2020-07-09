@@ -7,8 +7,8 @@ import 'package:shopApp/screens/product_detail_screen.dart';
 class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(context, listen: false);
-    final cart = Provider.of<Cart>(context, listen: false);
+    final product = Provider.of<Product>(context, listen: true);
+    final cart = Provider.of<Cart>(context, listen: true);
     return GridTile(
         child: GestureDetector(
             onTap: () => Navigator.of(context).pushNamed(
