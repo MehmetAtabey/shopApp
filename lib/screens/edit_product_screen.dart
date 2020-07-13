@@ -64,12 +64,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (!isValid) {
       return;
     }
+    _form.currentState.save();
     if (_editedProduct.id != null) {
-      Provider.of<ProductsProvider>(context)
+      Provider.of<ProductsProvider>(context,listen: false)
           .updateProduct(_editedProduct.id, _editedProduct);
     }
-    _form.currentState.save();
+    else
+    {
     productProvider.addProduct(_editedProduct);
+    }
+    
+
     Navigator.of(context).pop();
   }
 
