@@ -66,14 +66,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
     _form.currentState.save();
     if (_editedProduct.id != null) {
-      Provider.of<ProductsProvider>(context,listen: false)
+      Provider.of<ProductsProvider>(context, listen: false)
           .updateProduct(_editedProduct.id, _editedProduct);
+    } else {
+      productProvider.addProduct(_editedProduct);
     }
-    else
-    {
-    productProvider.addProduct(_editedProduct);
-    }
-    
 
     Navigator.of(context).pop();
   }
@@ -125,8 +122,10 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     labelText: 'Price',
                   ),
                   textInputAction: TextInputAction.next,
+                  onFieldSubmitted: (value) => FocusScope.of(context)
+                      .requestFocus(_descriptionFocusNode),
                   keyboardType: TextInputType.number,
-                  focusNode: _descriptionFocusNode,
+                  focusNode: _priceFocusNode,
                   validator: (value) {
                     if (value.isEmpty) return 'Please enter a price';
                     if (double.tryParse(value) == null)
@@ -143,7 +142,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
                       imageUrl: _editedProduct.imageUrl),
                 ),
                 TextFormField(
+                  focusNode: _descriptionFocusNode,
                   initialValue: _initValues['description'],
+                  onSaved: (value) => _editedProduct = Product(
+                      id: _editedProduct.id,
+                      title: _editedProduct.title,
+                      description: value,
+                      price: _editedProduct.price,
+                      imageUrl: _editedProduct.imageUrl),
                   decoration: InputDecoration(labelText: 'Description'),
                   maxLines: 3,
                   keyboardType: TextInputType.multiline,

@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shopApp/models/product.dart';
 
 class ProductsProvider with ChangeNotifier {
@@ -37,22 +39,31 @@ class ProductsProvider with ChangeNotifier {
     ),
   ];
 
-  // var _showFavoritesOnly = false;
-
   List<Product> get items {
-    // if (_showFavoritesOnly)
-    //   return _items.where((element) => element.isFavorite).toList();
     return _items;
   }
 
-  void addProduct(Product prouct) {
-    _items.add(new Product(
-        id: DateTime.now().toString(),
-        title: prouct.title,
-        description: prouct.description,
-        price: prouct.price,
-        imageUrl: prouct.imageUrl));
-    notifyListeners();
+  void addProduct(Product product) {
+    const url = 'https://flutter-test-4f64b.firebaseio.com/products.json';
+    http
+        .post(url,
+            body: json.encode({
+              'title': product.title,
+              'description:': product.description,
+              'imageUrl': product.imageUrl,
+              'price': product.price,
+              'isFavorite': product.isFavorite
+            }))
+        .then((response) {
+      print(json.decode(response.body));
+      items.add(new Product(
+          id: json.decode(response.body)['name'],
+          title: product.title,
+          description: product.description,
+          price: product.price,
+          imageUrl: product.imageUrl));
+      notifyListeners();
+    });
   }
 
   void updateProduct(String id, Product newProduct) {
@@ -64,21 +75,10 @@ class ProductsProvider with ChangeNotifier {
       print('...');
   }
 
-  void deleteProduct(String id)
-  {
-    _items.removeWhere((element) => element.id==id);
+  void deleteProduct(String id) {
+    _items.removeWhere((element) => element.id == id);
     notifyListeners();
   }
-
-  // void showFavoritesOnly() {
-  //   _showFavoritesOnly = true;
-  //   notifyListeners();
-  // }
-
-  // void showAll() {
-  //   _showFavoritesOnly = false;
-  //   notifyListeners();
-  // }
 
   List<Product> get favoritesItems {
     return _items.where((element) => element.isFavorite).toList();
