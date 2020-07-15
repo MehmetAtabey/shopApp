@@ -11,6 +11,7 @@ class EditProductScreen extends StatefulWidget {
 }
 
 class _EditProductScreenState extends State<EditProductScreen> {
+  var isloaded= false;
   var isinit = true;
   final _priceFocusNode = FocusNode();
   final _descriptionFocusNode = FocusNode();
@@ -65,14 +66,19 @@ class _EditProductScreenState extends State<EditProductScreen> {
       return;
     }
     _form.currentState.save();
+    setState(() {
+      isloaded=true;
+    });
     if (_editedProduct.id != null) {
       Provider.of<ProductsProvider>(context, listen: false)
           .updateProduct(_editedProduct.id, _editedProduct);
     } else {
-      productProvider.addProduct(_editedProduct);
+      productProvider.addProduct(_editedProduct).then((value) => 
+      Navigator.of(context).pop()
+      );
     }
 
-    Navigator.of(context).pop();
+    
   }
 
   @override
@@ -94,7 +100,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
           IconButton(icon: Icon(Icons.save), onPressed: _saveForm)
         ],
       ),
-      body: Padding(
+      body:isloaded ? Center(child: CircularProgressIndicator()) : Padding(
         padding: EdgeInsets.all(16),
         child: Form(
             key: _form,

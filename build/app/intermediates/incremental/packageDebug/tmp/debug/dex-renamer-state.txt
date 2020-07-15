@@ -1,4 +1,4 @@
-#Tue Jul 14 10:43:35 EET 2020
-base.0=C\:\\dev\\projects\\shopApp\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
+#Tue Jul 14 20:51:02 EET 2020
+base.0=D\:\\dev\\flutterBestPractices\\shopApp\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
 path.0=classes.dex
 renamed.0=classes.dex
