@@ -38,7 +38,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (isinit) {
       final productId = ModalRoute.of(context).settings.arguments as String;
       if (productId != null) {
-        _editedProduct = Provider.of<ProductsProvider>(context, listen: false)
+        _editedProduct = Provider.of<ProductsProvider>(context, listen: true)
             .findById(productId);
         _initValues = {
           'title': _editedProduct.title,
@@ -71,7 +71,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
     });
     if (_editedProduct.id != null) {
       Provider.of<ProductsProvider>(context, listen: false)
-          .updateProduct(_editedProduct.id, _editedProduct);
+          .updateProduct(_editedProduct.id, _editedProduct)
+          .then((value) => setState(() {
+                isinit = true;
+                isloaded = false;
+              }));
     } else {
       productProvider.addProduct(_editedProduct).catchError((error) {
         return showDialog(

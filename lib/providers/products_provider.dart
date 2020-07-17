@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shopApp/models/http_exception.dart';
 import 'package:shopApp/models/product.dart';
 
 class ProductsProvider with ChangeNotifier {
@@ -77,7 +78,7 @@ class ProductsProvider with ChangeNotifier {
       final response = await http.post(url,
           body: json.encode({
             'title': product.title,
-            'description:': product.description,
+            'description': product.description,
             'imageUrl': product.imageUrl,
             'price': product.price,
             'isFavorite': product.isFavorite,
@@ -96,18 +97,56 @@ class ProductsProvider with ChangeNotifier {
     }
   }
 
-  void updateProduct(String id, Product newProduct) {
+  Future<void> fetchAndSetProducts() async {
+    const url = 'https://flutter-test-4f64b.firebaseio.com/products.json';
+    try {
+      final response = await http.get(url);
+      final exractedData = json.decode(response.body) as Map<String, dynamic>;
+      print(response.body);
+      _items = [];
+      exractedData.forEach((key, value) {
+        _items.add(new Product(
+            id: key,
+            title: value['title'],
+            description: value['description'],
+            price: value['price'],
+            imageUrl: value['imageUrl']));
+      });
+      notifyListeners();
+    } catch (ex) {
+      throw ex;
+    }
+  }
+
+  Future<void> updateProduct(String id, Product newProduct) async {
     final producIndex = items.indexWhere((element) => element.id == id);
     if (producIndex >= 0) {
+      final url = 'https://flutter-test-4f64b.firebaseio.com/products/$id.json';
+      await http.patch(url,
+          body: json.encode({
+            'title': newProduct.title,
+            'description': newProduct.description,
+            'imageUrl': newProduct.imageUrl,
+            'price': newProduct.price
+          }));
       _items[producIndex] = newProduct;
       notifyListeners();
     } else
       print('...');
   }
 
-  void deleteProduct(String id) {
-    _items.removeWhere((element) => element.id == id);
-    notifyListeners();
+  Future<void> deleteProduct(String id) async {
+    try {
+      final url = 'https://flutter-test-4f64b.firebaseio.com/products/$id.json';
+      await http
+          .delete(url)
+          .catchError((_) => throw HttpException('could not delete'))
+          .then((value) => _items.removeWhere((element) => element.id == id));
+
+      notifyListeners();
+    } catch (ex) {
+      throw ex;
+    }
   }
 
   List<Product> get favoritesItems {

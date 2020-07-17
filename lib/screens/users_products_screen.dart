@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:shopApp/providers/products_provider.dart';
 import 'package:shopApp/widgets/app_drawer.dart';
 import 'package:shopApp/widgets/user_product_item.dart';
-
 import 'edit_product_screen.dart';
 
 class UserProductsScreen extends StatelessWidget {
@@ -22,11 +21,14 @@ class UserProductsScreen extends StatelessWidget {
                   Navigator.of(context).pushNamed(EditProductScreen.routeName))
         ],
       ),
-      body: Padding(
-        padding: EdgeInsets.all(8),
-        child: ListView.builder(
-          itemBuilder: (_, i) => UserProductItem(productsData.items[i]),
-          itemCount: productsData.items.length,
+      body: RefreshIndicator(
+        onRefresh: () => productsData.fetchAndSetProducts(),
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: ListView.builder(
+            itemBuilder: (_, i) => UserProductItem(productsData.items[i]),
+            itemCount: productsData.items.length,
+          ),
         ),
       ),
     );

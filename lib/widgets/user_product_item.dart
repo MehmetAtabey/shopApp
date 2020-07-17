@@ -6,7 +6,6 @@ import 'package:shopApp/screens/edit_product_screen.dart';
 
 class UserProductItem extends StatelessWidget {
   final Product product;
-
   UserProductItem(this.product);
 
   @override
@@ -26,7 +25,9 @@ class UserProductItem extends StatelessWidget {
                 onPressed: () => Navigator.of(context).pushNamed(
                     EditProductScreen.routeName,
                     arguments: product.id)),
-            IconButton(icon: Icon(Icons.delete), onPressed: () => productProvider.deleteProduct(product.id)),
+            IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () => productProvider.deleteProduct(product.id)),
           ],
         ),
       ),

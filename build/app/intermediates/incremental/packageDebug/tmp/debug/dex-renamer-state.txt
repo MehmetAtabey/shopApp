@@ -1,4 +1,4 @@
-#Thu Jul 16 17:41:14 EET 2020
+#Fri Jul 17 13:43:44 EET 2020
 base.0=C\:\\dev\\projects\\shopApp\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\out\\classes.dex
 path.0=classes.dex
 renamed.0=classes.dex
