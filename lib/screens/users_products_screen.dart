@@ -22,7 +22,7 @@ class UserProductsScreen extends StatelessWidget {
         ],
       ),
       body: RefreshIndicator(
-        onRefresh: () => productsData.fetchAndSetProducts(),
+        onRefresh: () => productsData.fetchAndSetProducts(true),
         child: Padding(
           padding: EdgeInsets.all(8),
           child: ListView.builder(

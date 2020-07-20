@@ -5,6 +5,9 @@ import 'package:shopApp/models/http_exception.dart';
 import 'package:shopApp/models/product.dart';
 
 class ProductsProvider with ChangeNotifier {
+  final String userId;
+  ProductsProvider(this.userId);
+
   List<Product> _items = [
     Product(
       id: 'p1',
@@ -81,8 +84,7 @@ class ProductsProvider with ChangeNotifier {
             'description': product.description,
             'imageUrl': product.imageUrl,
             'price': product.price,
-            'isFavorite': product.isFavorite,
-            'gulperi': 'test'
+            'creatorId': userId
           }));
       items.add(new Product(
           id: json.decode(response.body)['name'],
@@ -97,12 +99,18 @@ class ProductsProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchAndSetProducts() async {
-    const url = 'https://flutter-test-4f64b.firebaseio.com/products.json';
+  Future<void> fetchAndSetProducts([bool filterbyUser = false]) async {
+    final filterString =
+        filterbyUser ? '?orderBy="creatorId"&equalTo="$userId"' : null;
+    final url =
+        'https://flutter-test-4f64b.firebaseio.com/products.json$filterString';
     try {
       final response = await http.get(url);
       final exractedData = json.decode(response.body) as Map<String, dynamic>;
       print(response.body);
+      final favoriteResponse = await http.get(
+          'https://flutter-test-4f64b.firebaseio.com/userFavorites/$userId.json');
+      final favoriteData = json.decode(favoriteResponse.body);
       _items = [];
       exractedData.forEach((key, value) {
         _items.add(new Product(
@@ -110,6 +118,8 @@ class ProductsProvider with ChangeNotifier {
             title: value['title'],
             description: value['description'],
             price: value['price'],
+            isFavorite:
+                favoriteData == null ? false : favoriteData[key] ?? false,
             imageUrl: value['imageUrl']));
       });
       notifyListeners();
