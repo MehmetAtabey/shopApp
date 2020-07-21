@@ -26,7 +26,7 @@ class Product with ChangeNotifier {
     final url =
         'https://flutter-test-4f64b.firebaseio.com/userFavorites/$userId/$id.json';
     try {
-      final response = await http.put(url, body: json.encode(isFavorite));
+      await http.put(url, body: json.encode(isFavorite));
     } catch (e) {}
     notifyListeners();
   }
