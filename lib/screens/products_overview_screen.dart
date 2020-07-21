@@ -20,16 +20,17 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
 
   @override
   void initState() {
+        Provider.of<ProductsProvider>(context,listen: false).fetchAndSetProducts().then((value) {
+      setState(() {
+        _loader = false;
+      });
+    });
     super.initState();
   }
 
   @override
   void didChangeDependencies() {
-    Provider.of<ProductsProvider>(context).fetchAndSetProducts().then((value) {
-      setState(() {
-        _loader = false;
-      });
-    });
+
     super.didChangeDependencies();
   }
 
