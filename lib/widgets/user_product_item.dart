@@ -10,7 +10,7 @@ class UserProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var productProvider = Provider.of<ProductsProvider>(context);
+    var productProvider = Provider.of<ProductsProvider>(context, listen: true);
     return ListTile(
       title: Text(product.title),
       leading: CircleAvatar(

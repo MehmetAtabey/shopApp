@@ -27,8 +27,8 @@ class MyApp extends StatelessWidget {
           // ChangeNotifierProvider(create: (ctx) => ProductsProvider()),
           ChangeNotifierProxyProvider<Auth, ProductsProvider>(
               create: null,
-              update: (context, value, previous) =>
-                  ProductsProvider(value.userId,previous == null ?  [] : previous.items)),
+              update: (context, value, previous) => ProductsProvider(
+                  value.userId, previous == null ? [] : previous.items)),
           ChangeNotifierProvider(create: (ctx) => Cart()),
           ChangeNotifierProvider(create: (ctx) => OrdersProvider()),
         ],
@@ -39,7 +39,14 @@ class MyApp extends StatelessWidget {
                   primarySwatch: Colors.purple,
                   accentColor: Colors.deepOrange,
                   fontFamily: 'Lato'),
-              home: auth.isAuth ? ProductsOverviewScreen() : FutureBuilder(future:auth.tryAutoLogin(),builder:(context, snapshot) => snapshot.connectionState == ConnectionState.waiting ? SplashScreen():AuthScreen()) ,
+              home: auth.isAuth
+                  ? ProductsOverviewScreen()
+                  : FutureBuilder(
+                      future: auth.tryAutoLogin(),
+                      builder: (context, snapshot) =>
+                          snapshot.connectionState == ConnectionState.waiting
+                              ? SplashScreen()
+                              : AuthScreen()),
               routes: {
                 ProductDetailScreen.routeName: (context) =>
                     ProductDetailScreen(),
